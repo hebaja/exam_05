@@ -44,24 +44,24 @@ void grow_clients(t_serv *server) {
     server->capacity = server->capacity ? server->capacity * 2 : 4;
     server->clients = realloc(server->clients, server->capacity * sizeof(int));
     if (!server->clients)
-      emit_fatal_error();
+	{
+		emit_fatal_error();
+		exit(1);
+	}
   }
 }
 
 void shrink_clients(t_serv *server, int i) {
   close(server->clients[i]);
-  server->clients[i] = server->clients[--server->clients_count]; // swap-remove
-  if (server->clients_count < server->capacity / 2 && server->capacity > 4)
-    server->capacity = server->capacity / 2;
-  // (realloc down is optional; swap-remove already shrinks the set)
+  server->clients[i] = server->clients[--server->clients_count];
 }
 
 void run_server(t_serv *server) {
   int running = 1;
 
   while (running) {
-    fd_set readfds;
-    int max_fd = server->sock_fd;
+    fd_set	readfds;
+    int		max_fd = server->sock_fd;
 
     FD_ZERO(&readfds);
     FD_SET(server->sock_fd, &readfds);
@@ -72,7 +72,9 @@ void run_server(t_serv *server) {
         max_fd = server->clients[i];
     }
     if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0)
+		{
       emit_fatal_error();
+		}
 
     if (FD_ISSET(server->sock_fd, &readfds)) {
       int client_fd = accept(server->sock_fd, NULL, NULL);
@@ -91,9 +93,12 @@ void run_server(t_serv *server) {
           buffer[bytes] = '\0';
           write(1, buffer, bytes);
           if (strcmp(buffer, "EXIT\n") == 0) {
-            printf("exting...\n");
             running = 0;
-          }
+		    for (int i = 0; i < server->clients_count; i++) {
+				close(server->clients[i]);			
+			}
+
+		  }
         }
       }
     }
@@ -121,6 +126,9 @@ int main(int argc, char **argv)
     emit_fatal_error();
 
   run_server(&server);
+
+
+  close(server.sock_fd);
 
   free(server.clients);
   return (0);
