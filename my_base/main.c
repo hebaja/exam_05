@@ -126,7 +126,7 @@ void run_server(t_serv *server)
 			if (server->clis[i].sock_fd > max_fd)
 				max_fd = server->clis[i].sock_fd;
 		}
-		if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0)
+		if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0) //TODO nfds
 			emit_fatal_error();
 
 		if (FD_ISSET(server->sock_fd, &readfds))
@@ -144,7 +144,7 @@ void run_server(t_serv *server)
 		}
 		for (int i = 0; i < server->clients_count; i++)
 		{
-			if (FD_ISSET(server->clis[i].sock_fd, &readfds))
+			if (FD_ISSET(server->clis[i].sock_fd, &readfds)) //TODO FD_ISSET
 			{
 				char buffer[512];
 				int bytes = recv(server->clis[i].sock_fd, buffer, sizeof(buffer), 0);
