@@ -9,127 +9,183 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-void emit_fatal_error() {
-  write(2, "Fatal error\n", 12);
-  exit(1);
+void emit_fatal_error()
+{
+	write(2, "Fatal error\n", 12);
+	exit(1);
 }
 
-typedef struct s_serv {
-  int sock_fd;
-  int *clients;
-  int clients_count;
-  int capacity;
-  struct sockaddr_in addr;
+typedef struct s_cli
+{
+	int sock_fd;
+	int id;
+} t_cli;
+
+typedef struct s_serv
+{
+	int sock_fd;
+	// int *clients;
+	t_cli *clis;
+	int clients_count;
+	int capacity;
+	struct sockaddr_in addr;
 } t_serv;
 
-void set_server(t_serv *server, int port) {
-  int opt = 1;
+void set_server(t_serv *server, int port)
+{
+	int opt = 1;
 
-  server->sock_fd = socket(AF_INET, SOCK_STREAM, 0);
-  server->addr.sin_family = AF_INET;
-  server->addr.sin_port = htons(port);
-  server->addr.sin_addr.s_addr = INADDR_ANY;
-  memset(server->addr.sin_zero, 0, sizeof(server->addr.sin_zero));
-  setsockopt(server->sock_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-  server->clients = calloc(1, sizeof(int));
-  if (!server->clients)
-  {
-    emit_fatal_error();
-    exit(1);
-  }
-}
-
-void grow_clients(t_serv *server) {
-  if (server->clients_count == server->capacity) {
-    server->capacity = server->capacity ? server->capacity * 2 : 4;
-    server->clients = realloc(server->clients, server->capacity * sizeof(int));
-    if (!server->clients)
+	server->sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+	server->addr.sin_family = AF_INET;
+	server->addr.sin_port = htons(port);
+	server->addr.sin_addr.s_addr = INADDR_ANY;
+	memset(server->addr.sin_zero, 0, sizeof(server->addr.sin_zero));
+	setsockopt(server->sock_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+	server->clis = calloc(1, sizeof(t_cli));
+	if (!server->clis)
 	{
 		emit_fatal_error();
 		exit(1);
 	}
-  }
 }
 
-void shrink_clients(t_serv *server, int i) {
-  close(server->clients[i]);
-  server->clients[i] = server->clients[--server->clients_count];
-}
-
-void run_server(t_serv *server) {
-  int running = 1;
-
-  while (running) {
-    fd_set	readfds;
-    int		max_fd = server->sock_fd;
-
-    FD_ZERO(&readfds);
-    FD_SET(server->sock_fd, &readfds);
-
-    for (int i = 0; i < server->clients_count; i++) {
-      FD_SET(server->clients[i], &readfds);
-      if (server->clients[i] > max_fd)
-        max_fd = server->clients[i];
-    }
-    if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0)
-		{
-      emit_fatal_error();
-		}
-
-    if (FD_ISSET(server->sock_fd, &readfds)) {
-      int client_fd = accept(server->sock_fd, NULL, NULL);
-      grow_clients(server);
-      server->clients[server->clients_count++] = client_fd;
-      printf("client connected %d\n", client_fd);
-    }
-    for (int i = 0; i < server->clients_count; i++) {
-      if (FD_ISSET(server->clients[i], &readfds)) {
-        char buffer[512];
-        int bytes = recv(server->clients[i], buffer, sizeof(buffer), 0);
-        if (bytes <= 0) {
-          shrink_clients(server, i);
-          i--;
-        } else {
-          buffer[bytes] = '\0';
-          write(1, buffer, bytes);
-          if (strcmp(buffer, "EXIT\n") == 0) {
-            running = 0;
-		    for (int i = 0; i < server->clients_count; i++) {
-				close(server->clients[i]);			
-			}
-
-		  }
-        }
-      }
-    }
-  }
-}
-
-int main(int argc, char **argv) 
+void grow_clients(t_serv *server)
 {
-  int     port;
-  t_serv  server = {0};
+	if (server->clients_count == server->capacity)
+	{
+		server->capacity = server->capacity ? server->capacity * 2 : 4;
+		server->clis = realloc(server->clis, server->capacity * sizeof(t_cli));
+		if (!server->clis)
+		{
+			emit_fatal_error();
+			exit(1);
+		}
+	}
+}
 
-  if (argc < 2)
-  {
-    write(2, "Wrong number of arguments\n", 26);
-    exit(1);
-  }
+void shrink_clients(t_serv *server, int i)
+{
+	close(server->clis[i].sock_fd);
+	server->clis[i] = server->clis[--server->clients_count];
+}
 
-  port = atoi(argv[1]);
-  set_server(&server, port);
+void broadcast(t_serv *server, t_cli client, char *str, int bytes)
+{
+	for (int i = 0; i < server->clients_count; i++)
+	{
+		if (server->clis[i].id == client.id)
+			continue;
+		send(server->clis[i].sock_fd, str, bytes, 0);
+	}
+}
 
-  if (bind(server.sock_fd, (struct sockaddr *)&server.addr,
-           sizeof(server.addr)) < 0)
-    emit_fatal_error();
-  if (listen(server.sock_fd, 10) < 0)
-    emit_fatal_error();
+void broadcastMessage(t_serv *server, char *buffer, t_cli client)
+{
+	char str[512];
 
-  run_server(&server);
+	int new_bytes = sprintf(str, "client %d: %s", client.id, buffer);
 
+	broadcast(server, client, str, new_bytes);
+}
 
-  close(server.sock_fd);
+void broadcastServerMessage(t_serv *server, t_cli client, int is_cli_disconnect)
+{
+	int bytes;
+	char str[512];
 
-  free(server.clients);
-  return (0);
+	if (is_cli_disconnect)
+		bytes = sprintf(str, "server: client %d just left\n", client.id);
+	else
+		bytes = sprintf(str, "server: client %d just arrived\n", client.id);
+
+	broadcast(server, client, str, bytes);
+}
+
+void run_server(t_serv *server)
+{
+	int running = 1;
+
+	while (running)
+	{
+		fd_set readfds;
+		int max_fd = server->sock_fd;
+
+		FD_ZERO(&readfds);
+		FD_SET(server->sock_fd, &readfds);
+
+		for (int i = 0; i < server->clients_count; i++)
+		{
+			FD_SET(server->clis[i].sock_fd, &readfds);
+			if (server->clis[i].sock_fd > max_fd)
+				max_fd = server->clis[i].sock_fd;
+		}
+		if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0)
+			emit_fatal_error();
+
+		if (FD_ISSET(server->sock_fd, &readfds))
+		{
+			int client_fd = accept(server->sock_fd, NULL, NULL);
+
+			t_cli client;
+
+			client.sock_fd = client_fd;
+			client.id = server->clients_count ? server->clis[server->clients_count - 1].id + 1 : 0;
+
+			grow_clients(server);
+			server->clis[server->clients_count++] = client;
+			broadcastServerMessage(server, client, 0);
+		}
+		for (int i = 0; i < server->clients_count; i++)
+		{
+			if (FD_ISSET(server->clis[i].sock_fd, &readfds))
+			{
+				char buffer[512];
+				int bytes = recv(server->clis[i].sock_fd, buffer, sizeof(buffer), 0);
+				if (bytes <= 0)
+				{
+					broadcastServerMessage(server, server->clis[i], 1);
+					shrink_clients(server, i);
+					i--;
+				}
+				else
+				{
+					buffer[bytes] = '\0';
+					broadcastMessage(server, buffer, server->clis[i]);
+					if (strcmp(buffer, "EXIT\n") == 0)
+					{
+						running = 0;
+						for (int i = 0; i < server->clients_count; i++)
+							close(server->clis[i].sock_fd);
+					}
+				}
+			}
+		}
+	}
+}
+
+int main(int argc, char **argv)
+{
+	int port;
+	t_serv server = {0};
+
+	if (argc < 2)
+	{
+		write(2, "Wrong number of arguments\n", 26);
+		exit(1);
+	}
+
+	port = atoi(argv[1]);
+	set_server(&server, port);
+
+	if (bind(server.sock_fd, (struct sockaddr *)&server.addr, sizeof(server.addr)) < 0)
+		emit_fatal_error();
+	if (listen(server.sock_fd, 10) < 0)
+		emit_fatal_error();
+
+	run_server(&server);
+
+	close(server.sock_fd);
+
+	free(server.clis);
+	return (0);
 }
