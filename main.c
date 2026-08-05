@@ -63,10 +63,17 @@ void grow_clients(t_serv *server)
 	}
 }
 
-void shrink_clients(t_serv *server, int i)
+void shrink_clients(t_serv *server, int pos)
 {
-	close(server->clis[i].sock_fd);
-	server->clis[i] = server->clis[--server->clients_count];
+	close(server->clis[pos].sock_fd);
+	
+	for (int i = 0; i < server->clients_count; i++)
+	{
+		if (i <= pos)
+			continue;
+		server->clis[i - 1] = server->clis[i];
+	}
+	server->clients_count--;
 }
 
 void broadcast(t_serv *server, t_cli client, char *str, int bytes)
@@ -158,6 +165,13 @@ void run_server(t_serv *server)
 							close(server->clis[i].sock_fd);
 					}
 				}
+
+				for (int i = 0; i < server->clients_count; i++) {
+					printf("id -> %d: fd -> %d\n", server->clis[i].id, server->clis[i].sock_fd);
+				}
+				printf("\n");
+
+
 			}
 		}
 	}
