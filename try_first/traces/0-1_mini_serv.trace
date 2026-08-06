@@ -1,0 +1,38 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+c1r1s6.42.rio
+Linux 5.15.0-186-generic x86_64
+$> date
+Wed Aug  5 08:06:55 PM -03 2026
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: git@vogsphere.42.rio:exam-2026-08-05/hebatist_exam-rank-02_exam_16h55m00s.git
+
+= Git history ==================================================================
+$> git -C /tmp/tmp3f8piegv/user log --pretty='%H - %an, %ad : %s'
+64bbf730041ad9e5a1ec6ee91d551e6ffdc17e62 - Exam 42, Wed Aug 5 20:04:41 2026 -0300 : second commit
+a85f3849a2dd0095def7db7b3df6cb1f45d70cda - Exam 42, Wed Aug 5 20:00:03 2026 -0300 : first commit
+ 
+= Collected files ==========================================
+$> ls -lAR /tmp/tmp3f8piegv/user
+/tmp/tmp3f8piegv/user:
+total 8
+-rw-r--r-- 1 root root  491 Aug  5 20:06 __GIT_HISTORY
+drwxr-xr-x 2 root root 4096 Aug  5 20:06 mini_serv
+
+/tmp/tmp3f8piegv/user/mini_serv:
+total 8
+-rw-r--r-- 1 root root 4234 Aug  5 20:06 mini_serv.c
+ 
+= mini_serv ====================================================================
+$> cc -Wextra -Wall -Werror fcntl.c mini_serv.c -o user_exe 
+mini_serv.c:81:6: error: unused variable 'opt' [-Werror,-Wunused-variable]
+        int     opt = 1;
+                ^
+1 error generated.
+
+Could not compile 'user_exe'
+Grade: 0
+
+= Final grade: 0 ===============================================================

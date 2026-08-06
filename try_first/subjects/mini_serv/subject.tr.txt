@@ -1,0 +1,63 @@
+Görev adı                 : mini_serv
+Beklenen dosyalar         : mini_serv.c
+İzin verilen fonksiyonlar : write, close, select, poll, socket, accept, listen, send,
+                            recv, bind, strstr, malloc, realloc, free, calloc,
+                            bzero, atoi, sprintf, strlen, exit, strcpy, strcat,
+                            memset, htons, htonl
+--------------------------------------------------------------------------------
+
+Client'ların 127.0.0.1'deki belirli bir port'tan bağlanmasını dinleyecek ve
+client'ların birbirleriyle konuşmasını sağlayacak bir program yazın
+
+Bu program ilk argüman olarak bağlanılacak port'u alacaktır.
+Eğer herhangi bir argüman verilmezse, stderr'e "Wrong number of arguments"
+yazmalı, ardından \n yazmalı ve status 1 ile exit etmeledir.
+Eğer Sistem Çağrıları, program bağlantıları kabul etmeye başlamadan önce bir 
+hata döndürürse, stderr'e "Fatal error" yazıp ve ardından bir \n yazmalı ve 
+status 1 ile exit etmeledir.
+Eğer bellek ayıramıyorsanız stderr'e "Fatal error" yazıp ve ardından \n yazmalı
+ve status 1 ile exit etmeledir.
+
+Programınız bloke olmamalıdır (non-blocking olmalıdır) ancak client tembel
+olabilir ve eğer mesajınızı okumazlarsa bağlantılarını kesmemelisiniz...
+
+Programınız #define preproc içermemelidir
+Programınız yalnızca 127.0.0.1'i dinlemelidir
+Alacağınız fd, eğer select çağrılmadan önce çağrılmamışsa, 'recv' veya 'send'
+bloklamak için yapacak şekilde ayarlanacaktır, ancak aksi takdirde bloke
+olmayacaktır.
+
+Bir client sunucuya bağlandığında:
+-- Client'a bir ID verilecektir. ilk client'ın 0 ID alacak ve her yeni client 
+son client'ın ID + 1 alacak
+- Aşağıdaki %d ler bu sayıyla değiştirilecek
+- sunucuya bir client bağlandığında, bağlı tüm client'lara bir mesaj gönderilir: 
+  "server: client %d just arrived\n"
+
+Clientların programınıza mesaj gönderebilmesi gerekir.
+- mesaj yalnızca yazdırılabilir karakterlerden oluşacaktır, kontrol etmenize
+  gerek yoktur
+- tek bir mesaj birden fazla \n içerebilir
+- Sunucu bir mesaj aldığında, onu her satır başına "client %d: " ekleyip 
+diğer tüm clientlara göndermelidir!
+
+Bir client'ın sunucuyla bağlantısı kesildiğinde:
+- sunucuya bağlı tüm clientlara bir mesaj gönderilir: 
+  "server: client %d just left\n"
+
+Bellek sizintiları veya fd sızıntıları yasaktır
+
+Size yardımcı olması için, bir sunucunun başlangıcını ve belki bazı yararlı
+fonksyonları içeren main.c dosyasını bulacaksınız. (Bu dosyanın yasaklanmış
+fonksyonlar kullandığına veya en son programınızda olmaması gereken şeyler 
+yazdığına dikkat edin)
+
+Uyarı Test cihazımız mesajları olabildiğince hızlı göndermenizi bekliyor.
+Gereksiz tamponlama (buffering) yapmayın.
+
+Değerlendirme normalden biraz daha uzun sürebilir...
+
+İpucu: programınızı test etmek için nc'yi kullanabilirsiniz
+İpucu: programınızı test etmek için nc kullanmalısınız
+İpucu: Test etmek için fcntl(fd, F_SETFL, O_NONBLOCK) kullanabilirsiniz ancak 
+select kullanın ve EAGAIN'i ASLA kontrol etmeyin (man 2 send)
