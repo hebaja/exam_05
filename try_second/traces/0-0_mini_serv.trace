@@ -1,0 +1,89 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+c2r6s4.42.rio
+Linux 5.15.0-86-generic x86_64
+$> date
+Sat Aug  8 03:56:13 PM -03 2026
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: git@vogsphere.42.rio:exam-2026-08-08/hebatist_exam-rank-03_exam_12h02m54s.git
+
+= Git history ==================================================================
+$> git -C /tmp/tmp3w2d7znm/user log --pretty='%H - %an, %ad : %s'
+6540e02be8b0eb706472e925d23808c4adacbd50 - Exam 42, Sat Aug 8 15:55:50 2026 -0300 : 0 run
+ 
+= Collected files ==========================================
+$> ls -lAR /tmp/tmp3w2d7znm/user
+/tmp/tmp3w2d7znm/user:
+total 8
+-rw-r--r-- 1 root root  251 Aug  8 15:56 __GIT_HISTORY
+drwxr-xr-x 2 root root 4096 Aug  8 15:56 mini_serv
+
+/tmp/tmp3w2d7znm/user/mini_serv:
+total 8
+-rw-r--r-- 1 root root 4536 Aug  8 15:56 mini_serv.c
+ 
+= mini_serv ====================================================================
+$> cc -Wextra -Wall -Werror mini_serv.c fcntl.c -o user_exe 
+
+$> cc -Wextra -Wall -Werror fcntl.c main.c -o ref_exe 
+
+= Test 1 ===================================================
+$> ./u5wuku1iu3o0cjvplgif0xht
+$> ./u5wuku1iu3o0cjvplgif0xht
+$> diff -U 3 user_output_test1 test1.output | cat -e
+
+Diff OK :D
+= Test 2 ===================================================
+$> ./0lnkkofi13880qvm0smhe2ve 22
+$> ./0lnkkofi13880qvm0smhe2ve 22
+$> diff -U 3 user_output_test2 test2.output | cat -e
+
+Diff OK :D
+= Test 3 ===================================================
+$> ./tester ./z1qpph4wxaz38fw4i39y3w3q generated3.test 32722831 | sort
+$> ./tester ./z1qpph4wxaz38fw4i39y3w3q generated3.test 32722831 | sort
+$> diff -U 3 user_output_test3 test3.output | cat -e
+
+Diff OK :D
+= Test 4 ===================================================
+$> ./tester ./8q2gttqs5k7mfl8s5f38qtgh generated4.test 32213763 | sort
+$> ./tester ./8q2gttqs5k7mfl8s5f38qtgh generated4.test 32213763 | sort
+$> diff -U 3 user_output_test4 test4.output | cat -e
+
+Diff OK :D
+= Test 5 ===================================================
+$> ./tester ./s3ffvsksmhtx8r0du8oxkosl generated5.test 6162523 | sort
+$> ./tester ./s3ffvsksmhtx8r0du8oxkosl generated5.test 6162523 | sort
+$> diff -U 3 user_output_test5 test5.output | cat -e
+
+Diff OK :D
+= Test 6 ===================================================
+$> ./tester ./0qvgrmy7vaozbf8jb35hgdkp generated6.test 23008297 | sort
+$> ./tester ./0qvgrmy7vaozbf8jb35hgdkp generated6.test 23008297 | sort
+$> diff -U 3 user_output_test6 test6.output | cat -e
+
+Diff OK :D
+= Test 7 ===================================================
+$> ./tester ./tt7gjmqkj45zmmqh1f3upx5u generated7.test 19610437 | sort
+$> ./tester ./tt7gjmqkj45zmmqh1f3upx5u generated7.test 19610437 | sort
+$> diff -U 3 user_output_test7 test7.output | cat -e
+--- user_output_test7	2026-08-08 18:56:34.879891998 +0000$
++++ test7.output	2026-08-08 18:56:37.119910105 +0000$
+@@ -21,9 +21,9 @@$
+ received 1: client 1: $
+ received 1: client 1: $
+ received 1: client 1: $
+-received 1: client 1: 35dlxsqtpvjaktd$
+ received 1: client 1: h6e9gxelil31nj5js9xgh1le7yesvezv369j43zzhxih2p4613bsvbii7jldizpu5unvg15fapzid0geoph20aljx4ahd2nb35hk$
+ received 1: client 1: kbk1700zpuu6dovv6irjzl0ehd1lwqdzsx8pibp3b6k5olfuhjlniiklli9a3lffjhvr945immbsm0t1fho1aa86ffn4gdr82zsx$
++received 1: client 1: m8w7il5603o7qb652zkvbv4vjlx4mkovn283m10pxhkerspb3iwrq1d4t4tkbsedgibxczjhsjtkcwz52xe3a35dlxsqtpvjaktd$
+ received 1: server: client 1 just arrived$
+ received 2: client 0: $
+ received 2: client 0: $
+
+Diff KO :(
+Grade: 0
+
+= Final grade: 0 ===============================================================

@@ -1,0 +1,35 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+c2r3s9.42.rio
+Linux 5.15.0-163-generic x86_64
+$> date
+Sat Aug  8 04:35:16 PM -03 2026
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: git@vogsphere.42.rio:exam-2026-08-08/hebatist_exam-rank-03_exam_12h02m54s.git
+
+= Git history ==================================================================
+$> git -C /tmp/tmpxuhkl8l3/user log --pretty='%H - %an, %ad : %s'
+bea9fb81b655ae04d46c1f9492139ea996350f89 - Exam 42, Sat Aug 8 16:34:59 2026 -0300 : run 2
+7a6b668a4e82c7aea8183da9eb87ee107ca73817 - Exam 42, Sat Aug 8 16:13:02 2026 -0300 : run 1
+6540e02be8b0eb706472e925d23808c4adacbd50 - Exam 42, Sat Aug 8 15:55:50 2026 -0300 : 0 run
+ 
+= Collected files ==========================================
+$> ls -lAR /tmp/tmpxuhkl8l3/user
+/tmp/tmpxuhkl8l3/user:
+total 8
+-rw-r--r-- 1 root root  698 Aug  8 16:35 __GIT_HISTORY
+drwxr-xr-x 2 root root 4096 Aug  8 16:35 mini_serv
+
+/tmp/tmpxuhkl8l3/user/mini_serv:
+total 8
+-rw-r--r-- 1 root root 4625 Aug  8 16:35 mini_serv.c
+ 
+= mini_serv ====================================================================
+$> cc -Wextra -Wall -Werror mini_serv.c fcntl.c -o user_exe 
+
+Forbidden function call in 'mini_serv.c': 'setsockopt'
+Grade: -42
+
+= Final grade: -42 =============================================================

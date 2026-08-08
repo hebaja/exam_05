@@ -1,0 +1,99 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+c1r3s6.42.rio
+Linux 5.15.0-186-generic x86_64
+$> date
+Sat Aug  8 05:42:26 PM -03 2026
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: git@vogsphere.42.rio:exam-2026-08-08/hebatist_exam-rank-03_exam_12h02m54s.git
+
+= Git history ==================================================================
+$> git -C /tmp/tmph6l_rn6n/user log --pretty='%H - %an, %ad : %s'
+e8a684e873107ac026cf0fbc5e3d639776713180 - Exam 42, Sat Aug 8 17:42:14 2026 -0300 : last run
+91ec0a361a115dd33968877abd83fd972048ba01 - Exam 42, Sat Aug 8 16:47:37 2026 -0300 : run 5
+fe5e502e748d9e2da3113bfc3ebee16285ad291d - Exam 42, Sat Aug 8 16:43:19 2026 -0300 : run 4
+bea9fb81b655ae04d46c1f9492139ea996350f89 - Exam 42, Sat Aug 8 16:34:59 2026 -0300 : run 2
+7a6b668a4e82c7aea8183da9eb87ee107ca73817 - Exam 42, Sat Aug 8 16:13:02 2026 -0300 : run 1
+6540e02be8b0eb706472e925d23808c4adacbd50 - Exam 42, Sat Aug 8 15:55:50 2026 -0300 : 0 run
+ 
+= Collected files ==========================================
+$> ls -lAR /tmp/tmph6l_rn6n/user
+/tmp/tmph6l_rn6n/user:
+total 8
+-rw-r--r-- 1 root root 1348 Aug  8 17:42 __GIT_HISTORY
+drwxr-xr-x 2 root root 4096 Aug  8 17:42 mini_serv
+
+/tmp/tmph6l_rn6n/user/mini_serv:
+total 8
+-rw-r--r-- 1 root root 4604 Aug  8 17:42 mini_serv.c
+ 
+= mini_serv ====================================================================
+$> cc -Wextra -Wall -Werror mini_serv.c fcntl.c -o user_exe 
+
+$> cc -Wextra -Wall -Werror fcntl.c main.c -o ref_exe 
+
+= Test 1 ===================================================
+$> ./bi41imsxc29whfcfmujpalzz
+$> ./bi41imsxc29whfcfmujpalzz
+$> diff -U 3 user_output_test1 test1.output | cat -e
+
+Diff OK :D
+= Test 2 ===================================================
+$> ./s489qnddihuz2pvud2vk93a5 22
+$> ./s489qnddihuz2pvud2vk93a5 22
+$> diff -U 3 user_output_test2 test2.output | cat -e
+
+Diff OK :D
+= Test 3 ===================================================
+$> ./tester ./kgz31qlx1y875m2uwizs05st generated3.test 2638336 | sort
+$> ./tester ./kgz31qlx1y875m2uwizs05st generated3.test 2638336 | sort
+$> diff -U 3 user_output_test3 test3.output | cat -e
+
+Diff OK :D
+= Test 4 ===================================================
+$> ./tester ./9gfacshrl02ju17wv11sv36v generated4.test 422358 | sort
+$> ./tester ./9gfacshrl02ju17wv11sv36v generated4.test 422358 | sort
+$> diff -U 3 user_output_test4 test4.output | cat -e
+
+Diff OK :D
+= Test 5 ===================================================
+$> ./tester ./b9k615r5gwlgowybwg6vqk1g generated5.test 25949119 | sort
+$> ./tester ./b9k615r5gwlgowybwg6vqk1g generated5.test 25949119 | sort
+$> diff -U 3 user_output_test5 test5.output | cat -e
+
+Diff OK :D
+= Test 6 ===================================================
+$> ./tester ./nw69jgtof4lvojuok7k2u8la generated6.test 16323576 | sort
+$> ./tester ./nw69jgtof4lvojuok7k2u8la generated6.test 16323576 | sort
+$> diff -U 3 user_output_test6 test6.output | cat -e
+
+Diff OK :D
+= Test 7 ===================================================
+$> ./tester ./uilavhq0w320k2fkrd49ff0n generated7.test 26429064 | sort
+$> ./tester ./uilavhq0w320k2fkrd49ff0n generated7.test 26429064 | sort
+$> diff -U 3 user_output_test7 test7.output | cat -e
+--- user_output_test7	2026-08-08 20:42:48.977790564 +0000$
++++ test7.output	2026-08-08 20:42:51.225865405 +0000$
+@@ -22,7 +22,7 @@$
+ received 1: client 1: $
+ received 1: client 1: $
+ received 1: client 1: 67e5jsuqbo12rdz3nf7a17txluhehumxt2hmu18gzdjsrqsg1gaa42n0sodam3aiba4ku4j8u06c204p5iknroades8979bncyqe$
+-received 1: client 1: r1psb80gx5yhxj3dwe0m7e9vnttk6xgqgi6s99mbtzbwm406dj$
++received 1: client 1: icqhynftxe0ndhies1uczrn45q5d3hec91e4p0eoucz7dibzjxr1psb80gx5yhxj3dwe0m7e9vnttk6xgqgi6s99mbtzbwm406dj$
+ received 1: client 1: vqahjpbqs4ihqwvthfk1mr94dlv821du20da2bltsmh3w3oc8fkrtqxws430ts4g1qphebag656y0fl9ufeqt469gth0g00d0w6s$
+ received 1: server: client 1 just arrived$
+ received 2: client 0: $
+@@ -50,5 +50,5 @@$
+ received 2: client 0: $
+ received 2: client 0: 0c0mrrgz6cwas1v3xkz07ud20hsc8y9xgrq871zl8n4s0jj5vjlh0faywrn2l20gwce8od5iphyianaco89tmn1flewr96y37m08$
+ received 2: client 0: 88r0czpei2gsyw8yjrj10mzbnjd6ua69toz0pwzw8ik1m2vo7wkysxp3gibp1vm6vdfildv8bbz110s6mxtx925ea5rgbi8tqc80$
+-received 2: client 0: s59a$
++received 2: client 0: cmnel3soe0phooiwyabufku4fq7qekhisjrtr31l9er2z3u6jyqcdbjkl3zwhplequ0uy355tgthzp2431oispggfms6i0ims59a$
+ received 2: server: client 0 just left$
+
+Diff KO :(
+Grade: 0
+
+= Final grade: 0 ===============================================================
